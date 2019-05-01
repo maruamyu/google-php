@@ -1,0 +1,35 @@
+{
+    "name": "maruamyu/google",
+    "type": "library",
+    "description": "light weight Google API client.",
+    "keywords": ["google"],
+    "homepage": "https://github.com/maruamyu/google-php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "maruamyu.net project",
+            "homepage": "http://maruamyu.net/",
+            "role": "Manager"
+        },
+        {
+            "name": "mirai-iro",
+            "homepage": "http://xn--r9j5bxu.jp/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.0",
+        "ext-json": "*",
+        "maruamyu/web-app-lib": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Maruamyu\\Google\\": "src/Maruamyu/Google/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "v1.0.x-dev"
+        }
+    }
+}
