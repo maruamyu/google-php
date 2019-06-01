@@ -52,8 +52,8 @@ class Client extends OAuth2Client
             $parameters = array_merge($parameters, $options);
         }
 
-        $endpointUrl = static::getEndpointUrl('v3/calendars/' . rawurlencode($calendarId) . '/events');
-        $response = $this->request('GET', $endpointUrl->withQueryString($parameters));
+        $endpointUri = static::getEndpointUri('v3/calendars/' . rawurlencode($calendarId) . '/events');
+        $response = $this->request('GET', $endpointUri->withQueryString($parameters));
         if ($response->statusCodeIsOk() == false) {
             throw new \RuntimeException($response->getBody(), $response->getStatusCode());
         }
@@ -84,8 +84,8 @@ class Client extends OAuth2Client
             $parameters = array_merge($parameters, $options);
         }
 
-        $endpointUrl = static::getEndpointUrl('v3/calendars/' . rawurlencode($calendarId) . '/events');
-        $response = $this->request('GET', $endpointUrl->withQueryString($parameters));
+        $endpointUri = static::getEndpointUri('v3/calendars/' . rawurlencode($calendarId) . '/events');
+        $response = $this->request('GET', $endpointUri->withQueryString($parameters));
         if ($response->statusCodeIsOk() == false) {
             throw new \RuntimeException($response->getBody(), $response->getStatusCode());
         }
@@ -100,7 +100,7 @@ class Client extends OAuth2Client
      * @param string $path
      * @return Uri
      */
-    protected static function getEndpointUrl($path)
+    protected static function getEndpointUri($path)
     {
         return new Uri(static::API_ENDPOINT_ROOT . $path);
     }
