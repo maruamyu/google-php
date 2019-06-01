@@ -3,13 +3,14 @@
 namespace Maruamyu\Google\Calendar;
 
 use Maruamyu\Core\Http\Message\Uri;
+use Maruamyu\Google\AuthorizationScopesInterface;
 use Maruamyu\Google\OAuth2Client;
 use Maruamyu\Google\ServiceAccountAuthorizationGrantTrait;
 
 /**
  * Google Calendar Client
  */
-class Client extends OAuth2Client
+class Client extends OAuth2Client implements AuthorizationScopesInterface
 {
     const API_ENDPOINT_ROOT = 'https://www.googleapis.com/calendar/';
 
@@ -31,6 +32,14 @@ class Client extends OAuth2Client
     public static function getReadOnlyScopes()
     {
         return [static::SCOPE . '.readonly'];
+    }
+
+    /**
+     * @return String[] scopes
+     */
+    public static function getReadAndWriteScopes()
+    {
+        return static::getScopes();
     }
 
     /**
