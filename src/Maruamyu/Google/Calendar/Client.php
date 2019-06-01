@@ -42,8 +42,8 @@ class Client extends OAuth2Client
     public function getEvents($calendarId, \DateTimeInterface $startAt, \DateTimeInterface $endAt, $pageToken = '', array $options = null)
     {
         $parameters = [
-            'timeMin' => $startAt->format(\DateTime::RFC3339),
-            'timeMax' => $endAt->format(\DateTime::RFC3339),
+            'timeMin' => $startAt->format(\DateTimeInterface::RFC3339),
+            'timeMax' => $endAt->format(\DateTimeInterface::RFC3339),
         ];
         if ($pageToken) {
             $parameters['pageToken'] = $pageToken;
@@ -75,7 +75,7 @@ class Client extends OAuth2Client
     public function getEventsByUpdatedMin($calendarId, \DateTimeInterface $updatedMin, $pageToken = '', array $options = null)
     {
         $parameters = [
-            'updatedMin' => $updatedMin->format(\DateTime::RFC3339),
+            'updatedMin' => $updatedMin->format(\DateTimeInterface::RFC3339),
         ];
         if ($pageToken) {
             $parameters['pageToken'] = $pageToken;
