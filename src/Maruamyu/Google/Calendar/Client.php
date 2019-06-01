@@ -4,6 +4,7 @@ namespace Maruamyu\Google\Calendar;
 
 use Maruamyu\Core\Http\Message\Uri;
 use Maruamyu\Google\OAuth2Client;
+use Maruamyu\Google\ServiceAccountAuthorizationGrantTrait;
 
 /**
  * Google Calendar Client
@@ -13,6 +14,8 @@ class Client extends OAuth2Client
     const API_ENDPOINT_ROOT = 'https://www.googleapis.com/calendar/';
 
     const SCOPE = 'https://www.googleapis.com/auth/calendar';
+
+    use ServiceAccountAuthorizationGrantTrait;
 
     /**
      * @return String[] scopes

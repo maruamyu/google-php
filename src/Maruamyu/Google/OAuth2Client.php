@@ -10,6 +10,9 @@ use Maruamyu\Core\OAuth2\AccessToken;
  */
 class OAuth2Client extends \Maruamyu\Core\OAuth2\Client
 {
+    /** @var ServiceAccount */
+    private $serviceAccount;
+
     /**
      * @param string $clientId
      * @param string $clientSecret
@@ -27,6 +30,54 @@ class OAuth2Client extends \Maruamyu\Core\OAuth2\Client
         $oAuth2Settings->isUseBasicAuthorizationOnClientCredentialsRequest = false;
 
         parent::__construct($oAuth2Settings, $accessToken);
+        $this->serviceAccount = null;
+    }
+
+    /**
+     * @param array $serviceAccountConfig service-account configuration (after json_decode())
+     * @return static
+     * @throws \Exception if invalid parameter
+     */
+    public static function createForServiceAccount(array $serviceAccountConfig)
+    {
+        $serviceAccount = new ServiceAccount($serviceAccountConfig);
+
+        $client = new static($serviceAccount->getClientId(), null);
+        $client->serviceAccount = $serviceAccount;
+        return $client;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isServiceAccount()
+    {
+        return isset($this->serviceAccount);
+    }
+
+    /**
+     * @param string[] $scopes list of scopes
+     * @param int $expireSec expire(seconds)
+     * @param string $subject account mail address (optional)
+     * @return AccessToken|null AccessToken (return null if failed)
+     * @throws \Exception if invalid auth-config
+     */
+    public function requestServiceAccountAuthorizationGrant(array $scopes, $expireSec = 3600, $subject = '')
+    {
+        if (!($this->isServiceAccount())) {
+            throw new \RuntimeException('service account config not set yet.');
+        }
+        $jsonWebKey = $this->serviceAccount->getJsonWebKey();
+        $issuer = $this->serviceAccount->getClientEmail();
+
+        $nowTimestamp = time();
+        $expireAtTimestamp = $nowTimestamp + $expireSec;
+
+        $optionalParameters = [
+            'iat' => $nowTimestamp,
+        ];
+
+        return $this->requestJwtBearerGrant($jsonWebKey, $issuer, $subject, $expireAtTimestamp, $scopes, $optionalParameters);
     }
 
     /**
