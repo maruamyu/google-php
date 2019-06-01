@@ -2,7 +2,7 @@
 
 namespace Maruamyu\Google\Calendar\Data;
 
-class Events
+class Event
 {
     const KIND = 'calendar#event';
 
@@ -33,6 +33,14 @@ class Events
         }
         $this->data = $data;
         $this->calendarTimeZone = $calendarTimeZone;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->data;
     }
 
     /**
@@ -103,8 +111,8 @@ class Events
     public function getLocationName()
     {
         $locationName = $this->getLocation();
-        list($locationName) = explode("\n", $locationName, 2);  # iOS "場所名\n住所"
-        list($locationName) = explode(', ', $locationName, 2);  # Google "場所名, 住所"
+        list($locationName) = explode("\n", $locationName, 2);  # iOS "{location_name}\n{address}"
+        list($locationName) = explode(', ', $locationName, 2);  # Google "{location_name}, {address}"
         return $locationName;
     }
 
@@ -204,21 +212,21 @@ class Events
     }
 
     /**
-     * @param array $data calendar Events item
+     * @param array $data calendar Event item
      * @throws \UnexpectedValueException if invalid data
      */
     protected static function validate($data)
     {
-        if (is_array($data) == false || empty($data)) {
+        if ((is_array($data) == false) || empty($data)) {
             throw new \UnexpectedValueException('data is invalid. (empty or not array)');
         }
 
         # if cancelled
-        if (isset($data['status']) == false || strcasecmp($data['status'], static::STATUS_CANCELLED) == 0) {
+        if ((isset($data['status']) == false) || (strcasecmp($data['status'], static::STATUS_CANCELLED) == 0)) {
             return;
         }
 
-        if (isset($data['kind']) == false || strcasecmp($data['kind'], static::KIND) != 0) {
+        if ((isset($data['kind']) == false) || (strcasecmp($data['kind'], static::KIND) != 0)) {
             throw new \UnexpectedValueException('kind is invalid.');
         }
         if (
@@ -233,7 +241,7 @@ class Events
         ) {
             throw new \UnexpectedValueException('end is invalid. (empty or not array)');
         }
-        if (isset($data['summary']) == false || strlen($data['summary']) < 1) {
+        if ((isset($data['summary']) == false) || (strlen($data['summary']) < 1)) {
             throw new \UnexpectedValueException('summary is blank.');
         }
     }
@@ -243,17 +251,19 @@ class Events
      */
     protected static function getDefaultValues()
     {
-        $nowTime = new \DateTime();
+        $nowTimestamp = time();
+        $nowDateTime = date(\DateTimeInterface::RFC3339, $nowTimestamp);
+        $nowDate = date('Y-m-d', $nowTimestamp);
         return [
             'kind' => static::KIND,
-            'iCalUID' => sha1(uniqid()),
-            'created' => $nowTime->format(\DateTime::RFC3339),
-            'updated' => $nowTime->format(\DateTime::RFC3339),
+            'iCalUID' => '',
+            'created' => $nowDateTime,
+            'updated' => $nowDateTime,
             'summary' => '',
             'description' => '',
             'location' => '',
-            'start' => ['date' => $nowTime->format('Y-m-d')],
-            'end' => ['date' => $nowTime->format('Y-m-d')],
+            'start' => ['date' => $nowDate],
+            'end' => ['date' => $nowDate],
         ];
     }
 }
