@@ -252,7 +252,7 @@ class Event
     protected static function getDefaultValues()
     {
         $nowTimestamp = time();
-        $nowDateTime = date(\DateTimeInterface::RFC3339, $nowTimestamp);
+        $nowDateTime = date(\DateTime::RFC3339, $nowTimestamp);
         $nowDate = date('Y-m-d', $nowTimestamp);
         return [
             'kind' => static::KIND,
