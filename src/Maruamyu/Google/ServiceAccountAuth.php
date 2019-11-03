@@ -3,16 +3,14 @@
 namespace Maruamyu\Google;
 
 use Maruamyu\Core\OAuth2\AccessToken;
+use Maruamyu\Core\OAuth2\AuthorizationServerMetadata;
 use Maruamyu\Core\OAuth2\Client as VanillaOAuth2Client;
-use Maruamyu\Core\OAuth2\Settings as OAuth2Settings;
 
 /**
  * Google Service Account Authentication
  */
 class ServiceAccountAuth
 {
-    const DEFAULT_TOKEN_ENDPOINT_URL = 'https://www.googleapis.com/oauth2/v4/token';
-
     /** @var ServiceAccount */
     private $serviceAccount;
 
@@ -42,14 +40,16 @@ class ServiceAccountAuth
 
         $this->serviceAccount = new ServiceAccount($authConfig);
 
-        $oAuth2Settings = new OAuth2Settings();
-        $oAuth2Settings->clientId = $authConfig['client_id'];
+        $metadataValues = [
+            'issuer' => 'https://accounts.google.com',
+            'token_endpoint' => 'https://www.googleapis.com/oauth2/v4/token',
+            'revocation_endpoint' => 'https://accounts.google.com/o/oauth2/revoke',
+        ];
         if (isset($authConfig['token_uri'])) {
-            $oAuth2Settings->tokenEndpoint = $authConfig['token_uri'];
-        } else {
-            $oAuth2Settings->tokenEndpoint = static::DEFAULT_TOKEN_ENDPOINT_URL;
+            $metadataValues['token_endpoint'] = $authConfig['token_uri'];
         }
-        $this->oAuth2Client = new VanillaOAuth2Client($oAuth2Settings);
+        $metadata = new AuthorizationServerMetadata($metadataValues);
+        $this->oAuth2Client = new VanillaOAuth2Client($metadata, $authConfig['client_id'], null);
     }
 
     /**
