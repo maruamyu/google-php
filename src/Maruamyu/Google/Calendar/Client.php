@@ -109,6 +109,26 @@ class Client extends OAuth2Client implements AuthorizationScopesInterface
     }
 
     /**
+     * @param string $calendarId
+     * @param string $eventId
+     * @return Data\Event
+     */
+    public function getEvent($calendarId, $eventId, \DateTimeZone $calendarTimeZone = null)
+    {
+        $endpointUri = static::getEndpointUri('v3/calendars/' . rawurlencode($calendarId) . '/events/' . rawurlencode($eventId));
+        $response = $this->request('GET', $endpointUri);
+        if ($response->statusCodeIsOk() == false) {
+            throw new \RuntimeException($response->getBody(), $response->getStatusCode());
+        }
+        $responseBody = strval($response->getBody());
+        if (strlen($responseBody) < 1) {
+            throw new \RuntimeException('response body is empty.');
+        }
+        $get = json_decode($responseBody, true);
+        return new Data\Event($get, $calendarTimeZone);
+    }
+
+    /**
      * @param string $path
      * @return Uri
      */

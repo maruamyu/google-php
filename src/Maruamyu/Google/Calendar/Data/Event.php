@@ -44,6 +44,14 @@ class Event
     }
 
     /**
+     * @return string event_id
+     */
+    public function getId()
+    {
+        return $this->data['id'];
+    }
+
+    /**
      * @return string iCalUID
      */
     public function getUniqueId()
@@ -256,6 +264,7 @@ class Event
         $nowDate = date('Y-m-d', $nowTimestamp);
         return [
             'kind' => static::KIND,
+            'id' => '',
             'iCalUID' => '',
             'created' => $nowDateTime,
             'updated' => $nowDateTime,
