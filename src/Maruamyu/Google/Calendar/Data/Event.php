@@ -52,7 +52,7 @@ class Event
     }
 
     /**
-     * @return boolean true if canceled
+     * @return bool true if canceled
      */
     public function isCancelled()
     {
@@ -65,7 +65,7 @@ class Event
     /**
      * alias of isCanceled()
      *
-     * @return boolean true if canceled
+     * @return bool true if canceled
      * @see isCanceled()
      */
     public function isDeleted()
@@ -199,7 +199,7 @@ class Event
     }
 
     /**
-     * @return boolean true if date only
+     * @return bool true if date only
      */
     public function isDateOnly()
     {

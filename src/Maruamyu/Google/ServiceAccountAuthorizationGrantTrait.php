@@ -9,7 +9,7 @@ trait ServiceAccountAuthorizationGrantTrait
 {
     /**
      * @param int $expireSec expire(seconds)
-     * @return boolean return true if succeeded
+     * @return bool return true if succeeded
      */
     public function requestReadOnlyAccessForServiceAccount($expireSec = 3600)
     {
@@ -24,7 +24,7 @@ trait ServiceAccountAuthorizationGrantTrait
 
     /**
      * @param int $expireSec expire(seconds)
-     * @return boolean return true if succeeded
+     * @return bool return true if succeeded
      */
     public function requestReadAndWriteAccessForServiceAccount($expireSec = 3600)
     {

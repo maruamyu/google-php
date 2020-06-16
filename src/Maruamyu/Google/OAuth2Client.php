@@ -51,7 +51,7 @@ class OAuth2Client extends \Maruamyu\Core\OAuth2\Client
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isServiceAccount()
     {
