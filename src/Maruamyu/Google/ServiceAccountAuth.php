@@ -62,23 +62,23 @@ class ServiceAccountAuth
 
     /**
      * @param string[] $scopes list of scopes
-     * @param int $expireSec expire(seconds)
+     * @param int $expiresIn expire(seconds)
      * @param string $subject account mail address
      * @return AccessToken|null AccessToken (return null if failed)
      * @throws \Exception if invalid auth-config
      */
-    public function fetchAccessToken(array $scopes, $expireSec = 3600, $subject = '')
+    public function fetchAccessToken(array $scopes, $expiresIn = 3600, $subject = '')
     {
         $jsonWebKey = $this->serviceAccount->getJsonWebKey();
         $issuer = $this->serviceAccount->getClientEmail();
 
         $nowTimestamp = time();
-        $expireAtTimestamp = $nowTimestamp + $expireSec;
+        $expiresAtTimestamp = $nowTimestamp + $expiresIn;
 
         $optionalParameters = [
             'iat' => $nowTimestamp,
         ];
 
-        return $this->oAuth2Client->requestJwtBearerGrant($jsonWebKey, $issuer, $subject, $expireAtTimestamp, $scopes, $optionalParameters);
+        return $this->oAuth2Client->requestJwtBearerGrant($jsonWebKey, $issuer, $subject, $expiresAtTimestamp, $scopes, $optionalParameters);
     }
 }

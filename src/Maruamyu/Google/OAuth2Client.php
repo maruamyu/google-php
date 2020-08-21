@@ -60,12 +60,12 @@ class OAuth2Client extends \Maruamyu\Core\OAuth2\Client
 
     /**
      * @param string[] $scopes list of scopes
-     * @param int $expireSec expire(seconds)
+     * @param int $expiresIn expire(seconds)
      * @param string $subject account mail address (optional)
      * @return AccessToken|null AccessToken (return null if failed)
      * @throws \Exception if invalid auth-config
      */
-    public function requestServiceAccountAuthorizationGrant(array $scopes, $expireSec = 3600, $subject = '')
+    public function requestServiceAccountAuthorizationGrant(array $scopes, $expiresIn = 3600, $subject = '')
     {
         if (!($this->isServiceAccount())) {
             throw new \RuntimeException('service account config not set yet.');
@@ -74,13 +74,13 @@ class OAuth2Client extends \Maruamyu\Core\OAuth2\Client
         $issuer = $this->serviceAccount->getClientEmail();
 
         $nowTimestamp = time();
-        $expireAtTimestamp = $nowTimestamp + $expireSec;
+        $expiresAtTimestamp = $nowTimestamp + $expiresIn;
 
         $optionalParameters = [
             'iat' => $nowTimestamp,
         ];
 
-        return $this->requestJwtBearerGrant($jsonWebKey, $issuer, $subject, $expireAtTimestamp, $scopes, $optionalParameters);
+        return $this->requestJwtBearerGrant($jsonWebKey, $issuer, $subject, $expiresAtTimestamp, $scopes, $optionalParameters);
     }
 
     /**

@@ -8,14 +8,14 @@ namespace Maruamyu\Google;
 trait ServiceAccountAuthorizationGrantTrait
 {
     /**
-     * @param int $expireSec expire(seconds)
+     * @param int $expiresIn expire(seconds)
      * @return bool return true if succeeded
      */
-    public function requestReadOnlyAccessForServiceAccount($expireSec = 3600)
+    public function requestReadOnlyAccessForServiceAccount($expiresIn = 3600)
     {
         $scopes = static::getReadOnlyScopes();
         try {
-            $accessToken = $this->requestServiceAccountAuthorizationGrant($scopes, $expireSec);
+            $accessToken = $this->requestServiceAccountAuthorizationGrant($scopes, $expiresIn);
         } catch (\Exception $exception) {
             return false;
         }
@@ -23,14 +23,14 @@ trait ServiceAccountAuthorizationGrantTrait
     }
 
     /**
-     * @param int $expireSec expire(seconds)
+     * @param int $expiresIn expire(seconds)
      * @return bool return true if succeeded
      */
-    public function requestReadAndWriteAccessForServiceAccount($expireSec = 3600)
+    public function requestReadAndWriteAccessForServiceAccount($expiresIn = 3600)
     {
         $scopes = static::getReadAndWriteScopes();
         try {
-            $accessToken = $this->requestServiceAccountAuthorizationGrant($scopes, $expireSec);
+            $accessToken = $this->requestServiceAccountAuthorizationGrant($scopes, $expiresIn);
         } catch (\Exception $exception) {
             return false;
         }
